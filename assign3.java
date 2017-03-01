@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by silveye on 2/27/17.
@@ -24,9 +25,10 @@ public class assign3 {
         } catch(IOException e) {
             System.out.println("File not found.");
         }
-        bTree ourTree = new bTree(personList);
-        ourTree.inOrder(ourTree.getMroot());
+        Scanner scan = new Scanner(System.in);
+        int pick = scan.nextInt();
+        bTree ourTree = new bTree(personList, pick);
+        ourTree.inOrder(ourTree.getMroot(), pick);
 
-        //Testing git stuff
     }
 }

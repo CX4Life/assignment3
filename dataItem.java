@@ -20,6 +20,8 @@ public class dataItem implements Comparable<dataItem>{
         this.count = count;
 
     }
+    public int compareNum(dataItem anotherItem) {return anotherItem.getCount() - this.count;}
+
     public int compareTo(dataItem anotherItem){
         return this.name.compareToIgnoreCase(anotherItem.getName());
     }
