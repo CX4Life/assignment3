@@ -21,8 +21,15 @@ public class nameArray {
     }
     public void displayAlphaSorted(){
         this.sortByName();
+        String head = String.format("%1$-10s %2$1s %3$7s %4$5s", "NAME", "GENDER", "OCCURRENCES", "%");
+        System.out.println(head);
         for(nameNode baby : names){
-            System.out.println(baby.getName());
+            String gen = "F";
+            if (baby.isMale()){
+                gen = "M";
+            }
+            String printPretty = String.format("%1$-15s %2$1s %3$-11d %4$.4f", baby.getName(), gen, baby.getCount(), baby.getFreq());
+            System.out.println(printPretty);
         }
     }
     public void displayFreqSorted(){

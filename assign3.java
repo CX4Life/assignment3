@@ -16,6 +16,7 @@ public class assign3 {
         List<nameNode> personList = new ArrayList<>();
         int[] picks = loadAndDisplay();
         if(picks[0] == -1)return;
+        int totalCount = 0;
         try{
             BufferedReader reader = new BufferedReader(new FileReader ("yob2014.txt"));
             while((line = reader.readLine()) != null){
@@ -24,9 +25,13 @@ public class assign3 {
                 int count = Integer.parseInt(line.split(",")[2]);
                 nameNode node = new nameNode(gender, name, count);
                 personList.add(node);
+                totalCount += node.getCount();
             }
         } catch(IOException e) {
             System.out.println("File not found.");
+        }
+        for(nameNode n : personList){
+            n.setFreq(totalCount);
         }
         if (picks[0] == 1) {
             nameTree ourTree = new nameTree(personList, picks[1]);

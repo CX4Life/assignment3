@@ -7,6 +7,7 @@ public class nameNode implements Comparable<nameNode>{
     private nameNode parent = null;
     private nameNode lChild = null;
     private nameNode rChild = null;
+    private double freq;
 
 
     public nameNode(String gender, String name, int count){
@@ -18,6 +19,12 @@ public class nameNode implements Comparable<nameNode>{
         }
         this.count = count;
 
+    }
+    public void setFreq(int total){
+        this.freq = ((double)this.count / (double)total) * 100.0;
+    }
+    public double getFreq(){
+        return this.freq;
     }
     public int compareNum(nameNode anotherItem) {return anotherItem.getCount() - this.count;}
 
