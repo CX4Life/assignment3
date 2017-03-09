@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,49 +13,69 @@ import java.util.Scanner;
  */
 public class assign3 {
     public static void main(String[] args) {
-        String line;
+        Display();
+        int[] picks = takeInput();
+        int a = picks[0];
+        int b = picks[1];
+
+        Scanner getInput = new Scanner(System.in);
+        List<nameNode> personList = readFile("yob2014.txt");
+        setFreqs(personList);
+        while(inputValid(a, b)) {
+            if (a == 1) {
+                HashSet<nameNode> randomizer = new HashSet<>(); // leverage that order is
+                for(nameNode n : personList){                   // unknown in hash set to ensure
+                    n.setrChild(null);                    // our tree is randomly balanced
+                    n.setlChild(null);                    // This helps prevent stack overflow
+                    randomizer.add(n);
+                }
+                nameTree ourTree = new nameTree(randomizer, b);
+                if(b == 1){
+                    System.out.println("Please input a name to search:");
+                    String findName = getInput.nextLine();
+                    ourTree.displaySearch(findName);
+                } else {
+                    ourTree.inOrder(ourTree.getRoot());
+                }
+            } else if (a == 2) {
+                System.out.println("BUILD ME A HASH MAP, SANTA");
+            } else {// array selected
+                nameArray array = new nameArray(personList);
+                if (b == 1) {
+                    System.out.println("Please input a name to search:");
+                    String findName = getInput.nextLine();
+                    array.displaySearchResults(findName);
+                } else if (b == 2) {
+                    array.displayFreqSorted();
+                } else {
+                    array.displayAlphaSorted();
+                }
+            }
+            picks = takeInput();
+            a = picks[0];
+            b = picks[1];
+        }
+    }
+
+    private static List<nameNode> readFile (String filename){
         List<nameNode> personList = new ArrayList<>();
-        int[] picks = loadAndDisplay();
-        if(picks[0] == -1)return;
-        int totalCount = 0;
+        String line;
         try{
-            BufferedReader reader = new BufferedReader(new FileReader ("yob2014.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader (filename));
             while((line = reader.readLine()) != null){
                 String name = line.split(",")[0];
                 String gender = line.split(",")[1];
                 int count = Integer.parseInt(line.split(",")[2]);
                 nameNode node = new nameNode(gender, name, count);
                 personList.add(node);
-                totalCount += node.getCount();
             }
         } catch(IOException e) {
             System.out.println("File not found.");
         }
-        for(nameNode n : personList){
-            n.setFreq(totalCount);
-        }
-        if (picks[0] == 1) {
-            nameTree ourTree = new nameTree(personList, picks[1]);
-            ourTree.inOrder(ourTree.getMroot(), picks[1]);
-        } else if (picks[0] == 2){
-            System.out.println("BUILD ME A HASH MAP, SANTA");
-        } else {
-            nameArray array = new nameArray();
-            for(nameNode baby : personList){
-                array.add(baby);
-            }
-            if(picks[1]==1) {
-                System.out.println("Not done");
-            } else if (picks[1] == 2){
-                array.displayFreqSorted();
-            } else {
-                array.displayAlphaSorted();
-            }
-        }
+        return personList;
     }
-    public static int[] loadAndDisplay(){
-        int[] ret = new int[2];
-        Scanner scan = new Scanner(System.in);
+
+    private static void Display(){
 
         System.out.println("   ___ ___    ____  ____ ____           ____ ____  ___        ______ ____ ___ ___  _____");
         System.out.println("  /  _]   \\  /    |/    |    \\         /    |    \\|   \\      |      |    |   |   |/ ___/");
@@ -79,6 +100,31 @@ public class assign3 {
         System.out.println(" |  ||  |  |   _]|     |    |  _  |  |  |     |     /  \\ |   [_|  _  |    \\/   \\_|  |  |");
         System.out.println(" |  ||  |  |  |  |     |    |  |  |  |  |     |     \\    |     |  |  |  .  \\     |  |  |");
         System.out.println("|____|__|__|__|   \\___/     |__|__|__|__|_____|      \\___|_____|__|__|__|\\_|\\____|__|__|");
+        System.out.println();
+
+    }
+
+    private static void setFreqs(List<nameNode> babies){
+        int total = 0;
+        for(nameNode n : babies){
+            total += n.getCount();
+        }
+        for(nameNode n : babies){
+            n.setFreq(total);
+        }
+    }
+
+    private static boolean inputValid(int pick1, int pick2){
+        return !(pick1 > 3 || pick1 < 0 || pick2 > 3 || pick2 < 0);
+    }
+
+    private static int[] takeInput(){
+        int[] ret = new int[2];
+        Scanner scan = new Scanner(System.in);
+        System.out.println();
+        System.out.println("*********************************************");
+        System.out.println("*** Enter a number greater than 3 to quit ***");
+        System.out.println("*********************************************");
         System.out.println();
         System.out.println("Please enter an integer to select your preferred data structure:");
         System.out.println("\t1-\tTree");

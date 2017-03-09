@@ -2,7 +2,7 @@
 
 public class nameNode implements Comparable<nameNode>{
     private String name;
-    private boolean male;
+    private boolean male = false;
     private int count;
     private nameNode parent = null;
     private nameNode lChild = null;
@@ -14,8 +14,6 @@ public class nameNode implements Comparable<nameNode>{
         this.name = name;
         if(gender.equals("M")){
             this.male = true;
-        } else {
-            this.male = false;
         }
         this.count = count;
 
@@ -58,7 +56,14 @@ public class nameNode implements Comparable<nameNode>{
 
     public nameNode getrChild() {
         return rChild;
-
+    }
+    public String showInfo(){
+        String gen = "F";
+        if (this.isMale()){
+            gen = "M";
+        }
+        return  String.format("%1$-15s %2$1s %3$-11d %4$.4f",
+                name, gen, count, freq);
     }
 
     public void setParent(nameNode parent) {
